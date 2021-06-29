@@ -1,0 +1,315 @@
+<script>
+    function submit(accept, id) {
+        console.log(id);
+        var row = document.getElementById('button_' + id);
+
+
+        var progress_bar = document.createElement("div");
+        progress_bar.setAttribute("class", "progress");
+
+        const p_bar = document.createElement("div");
+        p_bar.setAttribute('class', 'progress-bar progress-bar-striped progress-bar-animated')
+        p_bar.setAttribute('role', 'progressbar')
+        p_bar.setAttribute('style', 'width: 100%;')
+        progress_bar.appendChild(p_bar);
+        row.parentNode.replaceChild(progress_bar, row);
+        $.ajax({
+
+            url: "battle/" + id + "/accept",
+            type: "POST",
+            data: {
+                accept: accept
+            },
+            success: function(data, textStatus, jqXHR) {
+                const s_text = document.createElement('p');
+                if (accept) s_text.innerHTML = 'In progress!';
+                else s_text.innerHTML = 'Declined';
+                progress_bar.parentNode.replaceChild(s_text, progress_bar);
+                console.log(data); // You can see the result which is created in chat.php
+                console.log(textStatus);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                const s_text = document.createElement('p');
+                s_text.innerHTML = 'Error, try again later';
+                progress_bar.parentNode.replaceChild(s_text, progress_bar);
+                console.log(textStatus); // if there is an error
+            }
+        });
+    }
+
+    function submit_score(accept, id) {
+        console.log(id);
+        var row = document.getElementById('button_' + id);
+
+
+        var progress_bar = document.createElement("div");
+        progress_bar.setAttribute("class", "progress");
+
+        const p_bar = document.createElement("div");
+        p_bar.setAttribute('class', 'progress-bar progress-bar-striped progress-bar-animated')
+        p_bar.setAttribute('role', 'progressbar')
+        p_bar.setAttribute('style', 'width: 100%;')
+        progress_bar.appendChild(p_bar);
+        row.parentNode.replaceChild(progress_bar, row);
+        $.ajax({
+
+            url: "battle/" + id + "/score",
+            type: "POST",
+            data: {
+                accept: accept
+            },
+            success: function(data, textStatus, jqXHR) {
+                const s_text = document.createElement('p');
+                if (accept) s_text.innerHTML = 'Score confirmed';
+                else s_text.innerHTML = 'Declined';
+                progress_bar.parentNode.replaceChild(s_text, progress_bar);
+                console.log(data); // You can see the result which is created in chat.php
+                console.log(textStatus);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                const s_text = document.createElement('p');
+                s_text.innerHTML = 'Error, try again later';
+                progress_bar.parentNode.replaceChild(s_text, progress_bar);
+                console.log(textStatus); // if there is an error
+            }
+        });
+    }
+</script>
+
+<div class="row mt-5 ml-1 mr-1">
+    <div class="col-5">
+        <div class="card card-body">
+            <%- include ('partials/messages') %>
+                <% if (typeof user_profile != 'undefined') { %>
+
+                    <div class="row">
+                        <div class="col-5">
+                            <img class="border border-light border-3" src="<%= img_link %> " alt="<%= user_profile.main_char.split(' ')[0] %> image" width="100%">
+                        </div>
+                        <div class="col-7">
+                            <h1 class="text-center mb-3">
+                                <%= user_profile.name %>
+                            </h1>
+                            <% if (own) { %>
+                                <div class="d-flex justify-content-end">
+                                    <a href="/user/edit">
+                                        <button type="button" class="btn btn-outline-success">Edit profile</button>
+                                    </a>
+                                </div>
+                                <% } %>
+                        </div>
+                        <table class="m-1">
+                            <tr>
+                                <th class="text-left mb-3" width="20%"> <i class="fab fa-steam"></i> Steam:</th>
+                                <th class="text-left text-break mb-3">
+                                    <%= user_profile.steam_profile %>
+                            </tr>
+                            </th>
+                            <tr>
+                                <th class="text-left mb-3" width="20%">Rating:</th>
+                                <th class="text-left mb-3">
+                                    <%= user_profile.mmr %>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-left mb-3" width="20%">Total Matches:</th>
+                                <th class="text-left mb-3">
+                                    <%= user_profile.match_history.total %>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-left mb-3" width="30%">Won/Lost/Declined(streak):</th>
+                                <th class="text-left mb-3">
+                                    <%= user_profile.match_history.won %>/
+                                        <%= user_profile.match_history.lost %>/
+                                            <%= user_profile.match_history.declined %> (
+                                                <%= user_profile.match_history.declined_streak %>)
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-left mb-3" width="30%">Other information:</th>
+                                <th class="text-left mb-3 text-break">
+                                    <%= user_profile.description %>
+                                </th>
+                            </tr>
+                        </table>
+
+
+
+                    </div>
+
+                    <% } %>
+        </div>
+
+
+    </div>
+    <div class="col-7">
+        <div class="card card-body">
+            <% if (typeof user_profile != 'undefined') { %>
+                <h1 class="text-center mb-3">
+                    Match history
+                </h1>
+                <table class="text-center table table-hover">
+                    <thead class="">
+                        <tr>
+                            <th>Player 1</th>
+                            <th>Score</th>
+                            <th>Player 2</th>
+                            <th>First to</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Delta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% battles.forEach(battle => { %>
+                            <tr>
+                                <td>
+                                    <a href="/user/<%= battle.player1 %> ">
+                                        <%= battle.player1 %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/battle/<%= battle.id %> ">
+                                        <%= battle.score1 %> -
+                                            <%= battle.score2 %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/user/<%= battle.player2 %> ">
+                                        <%= battle.player2 %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <%= battle.max_score %>
+                                </td>
+                                <td>
+                                    <span>
+                                            <% var date = ''
+                                            if (battle.date.getDate().toString().length === 1){
+                                                date += '0' + battle.date.getDate() + '/'
+                                            } else {
+                                                date += battle.date.getDate() + '/'
+                                            }
+                                            if (battle.date.getMonth().toString().length === 1){
+                                                date += '0' + battle.date.getMonth() + ' '
+                                            } else {
+                                                date += battle.date.getMonth() + ' '
+                                            }
+                                            if (battle.date.getHours().toString().length === 1){
+                                                date += '0' + battle.date.getHours() + ':'
+                                            } else {
+                                                date += battle.date.getHours() + ':'
+                                            }
+                                            if (battle.date.getMinutes().toString().length === 1){
+                                                date += '0' + battle.date.getMinutes()
+                                            } else {
+                                                date += battle.date.getMinutes()
+                                            }
+                                             %> 
+                                            <%= date %>                                     
+                                            </span>
+                                </td>
+                                <td>
+                                    <div id="button_<%= battle.id %>">
+
+
+                                        <% if (!battle.accepted && battle.active) { %>
+                                            <% if (user_profile.name === battle.player2 && own) { %>
+                                                <button type="button" class="btn btn-success" onclick="submit(true, '<%= battle.id %>')">Accept</button>
+                                                <button type="button" class="btn btn-danger" onclick="submit(false, '<%= battle.id %>')">Decline</button>
+                                                <% } else { %>
+                                                    Waiting for match confirmation
+                                                    <% } %>
+                                                        <% } if (battle.active && battle.accepted) { %>
+                                                            <% if (battle.confirmation_sent) { %>
+                                                                <% if (battle.player_to_confirm == user_profile.name && own) { %>
+                                                                    <div class="row">
+                                                                        Confirm score?
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col">
+
+                                                                            <button type="button" class="btn btn-success" onclick="submit_score(true, '<%= battle.id %>')">Yes</button>
+                                                                        </div>
+                                                                        <div class="col">
+
+                                                                            <button type="button" class="btn btn-danger" onclick="submit_score(false, '<%= battle.id %>')">No</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <% } else { %>
+                                                                        Waiting for score confirmation
+                                                                        <% } %>
+                                                                            <% } else { %>
+                                                                                In progress
+                                                                                <% } %>
+                                                                                    <% } if (!battle.active && battle.accepted) { %>
+                                                                                        <% if (battle.winner === user_profile.name) { %>
+
+                                                                                            <span class="badge rounded-pill bg-success">Win</span>
+                                                                                            <% } else { %>
+
+                                                                                                <span class="badge rounded-pill bg-danger">Lose</span>
+                                                                                                <% } %>
+
+                                                                                                    <% } if (!battle.active && !battle.accepted) { %>
+                                                                                                        Battle declined
+                                                                                                        <% } %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <%= Math.abs(battle.delta) %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% if (pages > 0) { %>
+                    <div class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <li class="page-item <% if(page <= 1) { %>disabled<% } %>">
+                                <a class="page-link" href="?page=<%= page <= 1 ? 0 : page - 1 %>">&laquo;</a>
+                            </li>
+                            <!-- <li class="page-item <% if(page <= 1) { %>disabled<% } %>"><a class="page-link" href="?page=1">1</a></li> -->
+
+                            <% var i = (Number(page) > 4 ? Number(page) - 3 : 1) %>
+                                <% if (i != 1) { %>
+                                    <li class="page-item"><a class="page-link">...</a></li>
+                                    <% } %>
+                                        <% for (; i <= (Number(page) + 3) && i <= pages; i++) { %>
+                                            <% if (i == page ) { %>
+                                                <li class="page-item disabled">
+                                                    <a class="page-link">
+                                                        <%= i %>
+                                                    </a>
+                                                </li>
+                                                <% } else { %>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=<%= i %>">
+                                                            <%= i %>
+                                                        </a>
+                                                    </li>
+                                                    <% } %>
+                                                        <% if (i == Number(page) + 3 && i < pages) { %>
+                                                            <li class="page-item"><a class="page-link">...</a></li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?page=<%= pages %>">
+                                                                    <%= pages %>
+                                                                </a>
+                                                            </li>
+                                                            <% } %>
+                                                                <% } %>
+
+                                                                    <li class="page-item <% if(page === pages) { %>disabled<% } %>"><a class="page-link" href="?page=<%= page <= pages ? pages : page + 1 %>">&raquo;</a></li>
+
+                        </ul>
+                    </div>
+                    <% } %>
+
+
+                        <% } %>
+        </div>
+
+
+    </div>
+</div>

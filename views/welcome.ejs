@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col mt-5">
+        <% if (typeof user != 'undefined') { %>
+
+            <h1>Welcome,
+                <%= user.name %>
+            </h1>
+            <h2>Your main is:
+                <%= user.main_char %>
+            </h2>
+
+            <a href="/user/logout" class="btn btn-secondary">Logout</a>
+
+
+            <% } else { %>
+                <div class="row mt-5">
+                    <div class="col-md-6 m-auto">
+                        <div class="card card-body text-center">
+                            <p>Create an account or login</p>
+
+                            <a href="/user/register" class="btn btn-primary btn-block mb-2">Register</a>
+                            <a href="/user/login" class="btn btn-secondary btn-block">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+    </div>
+    <div class="col mt-5">
+
+        <div class="card card-body">
+            <table class="table">
+                <h1 class="text-center mb-3">
+                    Leaderboard
+                </h1>
+                <thead class="">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let i = 0; i < players.length; i++ ) { %>
+                        <% j = i+1; %>
+                            <tr>
+                                <td>
+                                    <%= j %>
+                                </td>
+                                <td>
+                                    <a href="/user/<%= players[i].name %> ">
+                                        <%= players[i].name %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/user/<%= players[i].mmr %> ">
+                                        <%= players[i].mmr %>
+                                    </a>
+                                </td>
+                            </tr>
+                            <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

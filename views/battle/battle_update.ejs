@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+    {% block title %}
+    <title>Edit battle</title>
+    {% endblock %}
+{% block content %}
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" action=".">
+        {% csrf_token %}
+
+        <p> {{object.player1}} {{form.player1_score}} VS {{object.player2}} {{form.player2_score}}</p>
+        <p> First To {{object.max_score}} </p>
+
+        <input type="submit" value="Update Battle!">
+</form>
+
+
+{% endblock %}

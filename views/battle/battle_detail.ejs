@@ -1,0 +1,93 @@
+<script>
+    function enter_res() {
+        var score1 = document.getElementById('score1');
+        var score2 = document.getElementById('score2');
+        var max_score = document.getElementById('max_score');
+        var button = document.getElementById('update-button')
+        var button_edit = document.getElementById('edit-results')
+
+        var i_score1 = document.createElement("input");
+        i_score1.setAttribute("style", "width: 25%");
+        i_score1.setAttribute("type", "number");
+        i_score1.setAttribute("name", "score1");
+        i_score1.setAttribute("id", "score1");
+        i_score1.setAttribute("value", score1.innerText);
+
+
+        var i_score2 = document.createElement("input");
+        i_score2.setAttribute("style", "width: 25%");
+        i_score2.setAttribute("type", "number");
+        i_score2.setAttribute("name", "score2");
+        i_score2.setAttribute("value", score2.innerText);
+
+
+        score1.parentNode.replaceChild(i_score1, score1);
+        score2.parentNode.replaceChild(i_score2, score2);
+
+        button.setAttribute('style', 'display: block');
+        button_edit.setAttribute('style', 'display: none');
+    }
+</script>
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3">
+                Battle Detail
+            </h1>
+            <%- include ('../partials/messages') %>
+                <div class="row xs-5">
+                    <div class="col-lg-4 text-center">
+                        <p>
+                            <a href="/user/<%= battle.player1 %> ">
+                                <%= battle.player1 %>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <p>
+                            vs
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                        <p>
+                            <a href="/user/<%= battle.player2 %> ">
+                                <%= battle.player2 %>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <% if (own && battle.active) { %>
+                    <form action="/battle/<%= battle.id %> " method="POST">
+                        <% } %>
+                            <div class="row xs-5">
+                                <div class="col-lg-4 text-center">
+                                    <p id="score1">
+                                        <%= battle.score1 %>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-center">
+                                    <p id="max_score">
+                                        First to
+                                        <%= battle.max_score %>
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 text-center">
+                                    <p id="score2">
+                                        <%= battle.score2 %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row xs-5 m-1">
+                                <% if (own && battle.active && battle.accepted) { %>
+                                    <button type="submit" id="update-button" class="btn btn-primary btn-block" style="display: none;">Submit results</button>
+                                    <% } %>
+                            </div>
+
+                    </form>
+                    <% if (own && battle.active && battle.accepted) { %>
+                        <button type="submit" id="edit-results" class="btn btn-primary btn-block" onclick="enter_res()">Enter results</button>
+                        <% } %>
+        </div>
+    </div>
+
+</div>

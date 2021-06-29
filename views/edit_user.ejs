@@ -1,0 +1,52 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-user-edit"></i> Edit Profile
+            </h1>
+            <%- include ('partials/messages') %>
+                <form action="/user/edit" method="POST">
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="<%= user.name %> ">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                        <div class="col-sm-10">
+                            <input type="email" readonly="" class="form-control-plaintext" id="staticEmail" value="<%= user.email %> ">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="steam_profile">Steam profile ID</label>
+                        <input type="text" id="steam_profile" name="steam_profile" class="form-control" placeholder="https://steamcommunity.com/id/*profile_id*/" value="<%= typeof user.steam_profile != 'undefined' ? user.steam_profile : '' %>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="main_char">Main character</label>
+                        <select class="form-select" id="main_char" name="main_char">
+                            <% chars.forEach(char => { %>
+                             <option value="<%= char %>" <% if (char === user.main_char) { %> selected<% } %>><%= char %> </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="steam_profile">Other information</label>
+                        <textarea type="text" maxlength="1000" id="description" name="description" class="form-control" placeholder="e.g. short bio/social media links/submain characters" rows="3"><%= typeof user.description != 'undefined' ? user.description : '' %></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Create Password" value="<%= typeof password != 'undefined' ? password : '' %>" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirm Password</label>
+                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password" value="<%= typeof password2 != 'undefined' ? password2 : '' %>" />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+                </form>
+        </div>
+    </div>
+</div>
